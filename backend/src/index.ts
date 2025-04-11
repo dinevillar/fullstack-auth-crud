@@ -4,6 +4,7 @@ import session from 'express-session';
 import Redis from 'ioredis';
 import RedisStore from 'connect-redis';
 import { config } from './config';
+import { authRouter } from './routes/auth';
 import { connectDB } from './db';
 
 const redis = new Redis(config.redisUrl);
@@ -34,6 +35,8 @@ app.use(session({
     sameSite: config.nodeEnv === 'production' ? 'none' : 'lax'
   }
 }));
+
+app.use('/api/auth', authRouter);
 
 const start = async () => {
   try {
