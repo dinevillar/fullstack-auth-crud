@@ -2,12 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
 import Redis from 'ioredis';
-import connectRedis from 'connect-redis';
+import RedisStore from 'connect-redis';
 import { config } from './config';
 import { connectDB } from './db';
 
-const RedisStore = connectRedis(session);
 const redis = new Redis(config.redisUrl);
+const redisStore = new RedisStore({
+  client: redis
+})
 
 const app = express();
 
@@ -21,7 +23,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use(session({
-  store: new RedisStore({ client: redis }),
+  store: redisStore,
   secret: config.sessionSecret,
   resave: false,
   saveUninitialized: false,
