@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken'
 import { config } from '@/config'
 import { User } from '@/models/User'
 import bcrypt from 'bcryptjs'
-import { router } from '@/routes/auth/forgot-password'
 import express from 'express'
 
 const router = express.Router();
@@ -33,7 +32,7 @@ router.post('/reset-password', async (req, res) => {
     await user.save();
 
     res.status(200).json({ message: 'Password reset successful' });
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ message: error.errors[0].message });
     }

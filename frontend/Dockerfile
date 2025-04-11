@@ -5,10 +5,13 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-COPY . .
+FROM base as development
+EXPOSE 3000
+CMD ["npm", "run", "dev"]
 
+FROM base as build
+COPY . .
 RUN npm run build
 
-EXPOSE 3000
-
+FROM build as preview
 CMD ["npm", "run", "preview"]
