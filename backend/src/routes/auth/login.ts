@@ -1,30 +1,34 @@
 import express from 'express';
-import { User } from '../models/User';
+import { User } from '@/models/User';
 import jwt from 'jsonwebtoken';
-import { config } from '../config';
+import { config } from '@/config';
 import { z } from 'zod';
 
 const router = express.Router();
 
-const signupSchema = z.object({
+// Login schema for email/password
+const loginSchema = z.object({
   email: z.string().email('Invalid email format'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  password: z.string(),
 });
 
-router.post('/signup', async (req, res) => {
+// Email/password login route
+router.post('/login', async (req, res) => {
   try {
     // Validate request body
-    const { email, password } = signupSchema.parse(req.body);
+    const { email, password } = loginSchema.parse(req.body);
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    // Create new user
-    const user = new User({ email, password });
-    await user.save();
+    // Compare passwords
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid email or password' });
+    }
 
     // Generate JWT token
     const token = jwt.sign(
@@ -37,7 +41,7 @@ router.post('/signup', async (req, res) => {
     req.session.userId = user._id.toString();
 
     // Return user data (excluding password)
-    res.status(201).json({
+    res.status(200).json({
       user: {
         id: user._id,
         email: user.email,
@@ -48,9 +52,9 @@ router.post('/signup', async (req, res) => {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ message: error.errors[0].message });
     }
-    console.error('Signup error:', error);
+    console.error('Login error:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-export { router as authRouter };
+export { router };

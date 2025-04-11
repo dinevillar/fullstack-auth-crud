@@ -1,7 +1,14 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-const userSchema = new mongoose.Schema({
+interface IUser extends Document {
+  email: string;
+  password: string;
+  comparePassword(candidatePassword: string): Promise<boolean>;
+  createdAt: Date;
+}
+
+const userSchema = new mongoose.Schema<IUser>({
   email: {
     type: String,
     required: true,

@@ -1,0 +1,6 @@
+{
+  "watch": ["src", "tsconfig.json"],
+  "ext": "ts,json",
+  "ignore": ["node_modules"],
+  "exec": "node --inspect=0.0.0.0:9229 -r ts-node/register -r dotenv/config -r tsconfig-paths/register src/index.ts"
+}

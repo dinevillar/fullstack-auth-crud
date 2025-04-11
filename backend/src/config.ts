@@ -8,8 +8,9 @@ export const config = {
   mongoUrl: process.env.MONGO_URL || 'mongodb://localhost:27017/auth-crud',
   redisUrl: process.env.REDIS_URL || 'redis://localhost:6379',
   clientUrl: process.env.CLIENT_URL || 'http://localhost:3000',
+  serverUrl: process.env.SERVER_URL || 'http://localhost:5001',
   sessionSecret: process.env.SESSION_SECRET || 'your-secret-key',
   jwtSecret: process.env.JWT_SECRET || 'your-jwt-secret',
-  googleClientId: process.env.GOOGLE_CLIENT_ID || '',
+  googleClientId: process.env.GOOGLE_CLIENT_ID || 'test-google-client-id',
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || ''
 };
