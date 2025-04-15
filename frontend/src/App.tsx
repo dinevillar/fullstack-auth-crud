@@ -1,5 +1,4 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Provider } from 'react-redux'
@@ -10,6 +9,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './pages/Dashboard.tsx'
 import Profile from './pages/Profile.tsx'
+import Products from './pages/Products.tsx'
 
 const theme = createTheme({
   palette: {
@@ -38,13 +38,13 @@ function App() {
               path="/"
               element={
                 <PrivateRoute>
-                  <Dashboard />
+                  <Dashboard><Products/></Dashboard>
                 </PrivateRoute>
               }
             />
             <Route path="/profile" element={
               <PrivateRoute>
-                <Profile />
+                <Dashboard><Profile resetPassword={false}/></Dashboard>
               </PrivateRoute>
             } />
           </Routes>

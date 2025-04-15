@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, Box, Avatar } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
-import Products from './Products.tsx'
-import { clearAuth } from '../store/slices/authSlice.ts'
-import { logout } from '../services/api.ts'
+import { clearAuth } from '../store/slices/authSlice'
+import { logout } from '../services/authenticatedApi'
 import { useNavigate } from 'react-router-dom'
 
-export default function Dashboard() {
+export default function Dashboard({ children }: {children: React.ReactNode}) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -44,7 +43,7 @@ export default function Dashboard() {
       <AppBar position="static" color="primary">
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Dashboard
+            <a href='/'>Dashboard</a>
           </Typography>
           <IconButton
             size="large"
@@ -67,9 +66,8 @@ export default function Dashboard() {
         </Toolbar>
       </AppBar>
 
-      {/* Main Content */}
       <Box sx={{ flexGrow: 1, p: 3, backgroundColor: '#f5f5f5' }}>
-        <Products />
+        {children}
       </Box>
     </Box>
   );

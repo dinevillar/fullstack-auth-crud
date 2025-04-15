@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Product {
-  id: string;
+  _id: string;
   name: string;
   price: number;
 }
@@ -38,13 +38,13 @@ const productsSlice = createSlice({
       state.items.push(action.payload);
     },
     updateProduct: (state, action: PayloadAction<Product>) => {
-      const index = state.items.findIndex(p => p.id === action.payload.id);
+      const index = state.items.findIndex(p => p._id === action.payload._id);
       if (index !== -1) {
-        state.items[index] = action.payload;
+        state.items[index] = { ...state.items[index], ...action.payload };
       }
     },
     deleteProduct: (state, action: PayloadAction<string>) => {
-      state.items = state.items.filter(p => p.id !== action.payload);
+      state.items = state.items.filter(p => p._id !== action.payload);
     },
   },
 });

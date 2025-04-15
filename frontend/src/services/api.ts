@@ -34,33 +34,7 @@ export const forgotPassword = async (email: string) => {
   return response.data;
 };
 
-export const logout = async () => {
-  const response = await api.post('/auth/logout');
-  return response.data;
-};
-
-// Products API
-export const getProducts = async () => {
-  const response = await api.get('/products');
-  return response.data;
-};
-
-export const getProduct = async (id: string) => {
-  const response = await api.get(`/products/${id}`);
-  return response.data;
-};
-
-export const createProduct = async (data: { name: string; description: string; price: number }) => {
-  const response = await api.post('/products', data);
-  return response.data;
-};
-
-export const updateProduct = async (id: string, data: { name: string; description: string; price: number }) => {
-  const response = await api.put(`/products/${id}`, data);
-  return response.data;
-};
-
-export const deleteProduct = async (id: string) => {
-  const response = await api.delete(`/products/${id}`);
+export const resetPassword = async (token: string, newPassword: string) => {
+  const response = await api.post('/auth/reset-password', { token, newPassword });
   return response.data;
 };

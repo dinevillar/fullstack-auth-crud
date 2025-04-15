@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { z } from 'zod'
 
 export interface IUser extends Document {
+  name?: string;
   email: string;
   password: string;
   passport: string;
@@ -12,11 +13,23 @@ export interface IUser extends Document {
 }
 
 export const zSignupSchema = z.object({
+  name: z.string().optional(),
   email: z.string().email('Invalid email format'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
+export const zUpdateSchema = z.object({
+  name: z.string().optional(),
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(6, 'Password must be at least 6 characters').optional(),
+});
+
 const userSchema = new mongoose.Schema<IUser>({
+  name: {
+    type: String,
+    required: false,
+    trim: true,
+  },
   email: {
     type: String,
     required: true,

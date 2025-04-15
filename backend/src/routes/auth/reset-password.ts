@@ -27,8 +27,7 @@ router.post('/reset-password', async (req, res) => {
     }
 
     // Update password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+    user.password = newPassword
     await user.save();
 
     res.status(200).json({ message: 'Password reset successful' });

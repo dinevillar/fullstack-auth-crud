@@ -15,6 +15,10 @@ import React, { useEffect, useState } from 'react';
       const [loading, setLoading] = useState(true);
 
       useEffect(() => {
+        if (isAuthenticated) {
+          setLoading(false);
+          return;
+        }
         const authToken = localStorage.getItem('authToken');
         if (authToken) {
           try {
@@ -25,7 +29,7 @@ import React, { useEffect, useState } from 'react';
           }
         }
         setLoading(false);
-      }, [dispatch]);
+      }, [dispatch, isAuthenticated]);
 
       if (loading) {
         return <div>Loading...</div>; // Show a loading state while checking authentication

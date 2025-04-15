@@ -3,7 +3,7 @@ import { ShoppingBag, Plus, Edit, Trash2 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { setProducts, addProduct, updateProduct, deleteProduct, setLoading, setError } from '../store/slices/productsSlice';
-import * as api from '../services/api';
+import * as api from '../services/authenticatedApi';
 
 interface ProductFormData {
   name: string;

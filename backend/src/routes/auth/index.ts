@@ -6,6 +6,9 @@ import { router as googleRouter } from './google';
 import { router as forgotPasswordRouter } from './forgot-password';
 import { router as resetPasswordRouter } from './reset-password';
 import { router as verifyEmailRouter } from './verify-email';
+import { router as updateUserRouter } from './update';
+import { router as getUserRouter } from './get';
+import { authMiddleware } from '@/middleware/auth'
 
 const router = express.Router();
 
@@ -15,6 +18,8 @@ router.use('', googleRouter);
 router.use('', forgotPasswordRouter);
 router.use('', resetPasswordRouter);
 router.use('', verifyEmailRouter);
-router.use('', logoutRouter);
+router.use('', authMiddleware, logoutRouter);
+router.use('', authMiddleware, updateUserRouter);
+router.use('', authMiddleware, getUserRouter);
 
 export { router as authRouter };

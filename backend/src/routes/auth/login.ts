@@ -12,7 +12,6 @@ const loginSchema = z.object({
   password: z.string(),
 });
 
-// Email/password login route
 router.post('/login', async (req, res) => {
   try {
     // Validate request body
@@ -45,6 +44,7 @@ router.post('/login', async (req, res) => {
       user: {
         id: user._id,
         email: user.email,
+        name: user.name || ''
       },
       token,
     });

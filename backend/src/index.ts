@@ -4,6 +4,7 @@ import session from 'express-session';
 import Redis from 'ioredis';
 import RedisStore from 'connect-redis';
 import { config } from './config';
+import { authMiddleware } from './middleware/auth';
 import { authRouter } from './routes/auth';
 import { productRouter } from './routes/products';
 import { connectDB } from './db';
@@ -38,7 +39,7 @@ app.use(session({
 }));
 
 app.use('/api/auth', authRouter);
-app.use('/api/products', productRouter);
+app.use('/api/products', authMiddleware, productRouter);
 
 const start = async () => {
   try {
