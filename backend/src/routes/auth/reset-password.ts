@@ -2,7 +2,6 @@ import { z } from 'zod'
 import jwt from 'jsonwebtoken'
 import { config } from '@/config'
 import { User } from '@/models/User'
-import bcrypt from 'bcryptjs'
 import express from 'express'
 
 const router = express.Router();
@@ -16,17 +15,14 @@ router.post('/reset-password', async (req, res) => {
   try {
     const { token, newPassword } = resetPasswordSchema.parse(req.body);
 
-    // Verify token
     const decoded: any = jwt.verify(token, config.jwtSecret);
     const userId = decoded.userId;
 
-    // Find user
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Update password
     user.password = newPassword
     await user.save();
 
