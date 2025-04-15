@@ -1,8 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Provider } from 'react-redux';
-import { store } from './store/index';
+import { Provider } from 'react-redux'
+import { store } from './store';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
@@ -31,15 +32,15 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
-            {/*<Route*/}
-            {/*  path="/products"*/}
-            {/*  element={*/}
-            {/*    <PrivateRoute>*/}
-            {/*      <Products />*/}
-            {/*    </PrivateRoute>*/}
-            {/*  }*/}
-            {/*/>*/}
-            {/*<Route path="/" element={<Navigate to="/products" replace />} />*/}
+            <Route
+              path="/products"
+              element={
+                <PrivateRoute>
+                  <Products />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/" element={<Navigate to="/products" replace />} />
           </Routes>
         </Router>
       </ThemeProvider>

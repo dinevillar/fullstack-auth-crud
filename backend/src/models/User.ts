@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-interface IUser extends Document {
+export interface IUser extends Document {
   email: string;
   password: string;
+  passport: string;
   comparePassword(candidatePassword: string): Promise<boolean>;
+  verifiedAt: Date;
   createdAt: Date;
 }
 
@@ -18,7 +20,17 @@ const userSchema = new mongoose.Schema<IUser>({
   },
   password: {
     type: String,
-    required: true,
+    default: ""
+  },
+  passport: {
+    type: String,
+    required: false,
+    default: null
+  },
+  verifiedAt: {
+    type: Date,
+    required: false,
+    default: null
   },
   createdAt: {
     type: Date,
@@ -28,7 +40,7 @@ const userSchema = new mongoose.Schema<IUser>({
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
+  if (!this.password || !this.isModified('password')) return next();
   
   try {
     const salt = await bcrypt.genSalt(10);

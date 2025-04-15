@@ -3,6 +3,7 @@ import { User } from '@/models/User'
 import jwt from 'jsonwebtoken'
 import { config } from '@/config'
 import express from 'express'
+import { mailTransport } from '@/services/mail'
 
 const router = express.Router();
 
@@ -25,6 +26,26 @@ router.post('/signup', async (req, res) => {
     // Create new user
     const user = new User({ email, password });
     await user.save();
+
+    // Generate email verification token
+    const verificationToken = jwt.sign(
+      { userId: user._id },
+      config.jwtSecret,
+      { expiresIn: '1d' }
+    );
+
+    const verificationUrl = `${config.serverUrl}/api/auth/verify-email?token=${verificationToken}`;
+
+    await mailTransport.sendMail({
+        from: {
+          name: config.smtpFromName,
+          email: config.smtpFromEmail,
+        },
+        to: email,
+        subject: 'Verify your email',
+        html: `<p>Please verify your email by clicking the link below:</p>
+             <a href="${verificationUrl}">Verify Email</a>`
+      })
 
     // Generate JWT token
     const token = jwt.sign(

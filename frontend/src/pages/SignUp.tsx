@@ -4,10 +4,12 @@ import { UserPlus } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { setAuth } from '../store/slices/authSlice';
 import { signup } from '../services/api';
+import { Button, CircularProgress } from '@mui/material'
 
 export default function SignUp() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -25,6 +27,7 @@ export default function SignUp() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
@@ -33,10 +36,14 @@ export default function SignUp() {
 
     try {
       const data = await signup(formData.email, formData.password);
+      localStorage.setItem('authToken', data.token);
       dispatch(setAuth({ user: data.user }));
-      navigate('/products');
+      navigate('/');
     } catch (err: any) {
+      console.error(err)
       setError(err.response?.data?.message || 'An error occurred during signup');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -120,12 +127,14 @@ export default function SignUp() {
             </div>
 
             <div>
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Create Account
-              </button>
+              <Button type="submit"
+                      variant="contained"
+                      color="primary"
+                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      disabled={isLoading}
+                      startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : null}>
+                {isLoading ? 'Signing up...' : 'Sign Up'}
+              </Button>
             </div>
           </form>
         </div>

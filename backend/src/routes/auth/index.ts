@@ -4,6 +4,7 @@ import { router as loginRouter } from './login';
 import { router as googleRouter } from './google';
 import { router as forgotPasswordRouter } from './forgot-password';
 import { router as resetPasswordRouter } from './reset-password';
+import { router as verifyEmailRouter } from './verify-email';
 
 const router = express.Router();
 
@@ -12,5 +13,6 @@ router.use('', loginRouter);
 router.use('', googleRouter);
 router.use('', forgotPasswordRouter);
 router.use('', resetPasswordRouter);
+router.use('', verifyEmailRouter);
 
 export { router as authRouter };

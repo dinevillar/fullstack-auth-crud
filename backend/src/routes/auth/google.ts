@@ -3,6 +3,7 @@ import { config } from '@/config'
 import { User } from '@/models/User'
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -23,6 +24,7 @@ passport.use(
           user = new User({
             email: profile.emails?.[0].value,
             password: '', // No password for Google-authenticated users
+            passport: 'google'
           });
           await user.save();
         }
@@ -54,10 +56,19 @@ router.get(
 // Google OAuth callback route
 router.get(
   '/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', { failureRedirect: `${config.clientUrl}/login?fail=1` }),
   (req, res) => {
-    // Successful authentication
-    res.redirect(`${config.clientUrl}/dashboard`);
+    if (!req.user) {
+      return res.redirect(`${config.clientUrl}/login?fail=1`);
+    }
+
+    const token = jwt.sign(
+      { userId: (req.user as any)._id },
+      config.jwtSecret,
+      { expiresIn: '7d' }
+    );
+
+    res.redirect(`${config.clientUrl}/login?token=${token}`);
   }
 );
 
