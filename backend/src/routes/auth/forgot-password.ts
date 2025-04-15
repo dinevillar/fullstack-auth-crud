@@ -3,13 +3,9 @@ import { z } from 'zod';
 import jwt from 'jsonwebtoken';
 import { User } from '@/models/User';
 import { config } from '@/config';
+import { sendHtmlEmail } from '@/services/mail'
 
 const router = express.Router();
-
-// Placeholder function for sending emails
-async function sendEmail(to: string, subject: string, text: string) {
-  console.log(`Sending email to ${to}: ${subject} - ${text}`);
-}
 
 const forgotPasswordSchema = z.object({
   email: z.string().email('Invalid email format'),
@@ -34,7 +30,12 @@ router.post('/forgot-password', async (req, res) => {
 
     // Send reset email
     const resetLink = `${config.clientUrl}/reset-password?token=${resetToken}`;
-    await sendEmail(email, 'Password Reset', `Click here to reset your password: ${resetLink}`);
+    await sendHtmlEmail(
+      email,
+      'Password Reset',
+      `<p>Click here to reset your password:</p>
+       <a href="${resetLink}">Reset Password</a>`
+    )
 
     res.status(200).json({ message: 'Password reset email sent' });
   } catch (error) {

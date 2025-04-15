@@ -5,9 +5,11 @@ import { AccountCircle } from '@mui/icons-material';
 import Products from './Products.tsx'
 import { clearAuth } from '../store/slices/authSlice.ts'
 import { logout } from '../services/api.ts'
+import { useNavigate } from 'react-router-dom'
 
 export default function Dashboard() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -15,8 +17,13 @@ export default function Dashboard() {
   };
 
   const handleMenuClose = () => {
+    setAnchorEl(null);
+  }
 
-  };
+  const handleProfile = () => {
+    setAnchorEl(null);
+    navigate('/profile');
+  }
 
   const handleLogout = async () => {
     setAnchorEl(null);
@@ -54,7 +61,7 @@ export default function Dashboard() {
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
           >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+            <MenuItem onClick={handleProfile}>Profile</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </Toolbar>

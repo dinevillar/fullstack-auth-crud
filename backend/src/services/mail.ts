@@ -9,3 +9,20 @@ export const mailTransport = nodemailer.createTransport({
     pass: config.smtpAuthPassword
   }
 });
+
+export const sendHtmlEmail = async (to: string, subject: string, html: string) => {
+  try {
+    await mailTransport.sendMail({
+      from: {
+        name: config.smtpFromName,
+        email: config.smtpFromEmail,
+      },
+      to,
+      subject,
+      html
+    })
+  } catch(err) {
+    console.log(err)
+    throw err
+  }
+}

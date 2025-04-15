@@ -3,7 +3,7 @@ import { User, zSignupSchema } from '@/models/User'
 import jwt from 'jsonwebtoken'
 import { config } from '@/config'
 import express from 'express'
-import { mailTransport } from '@/services/mail'
+import { sendHtmlEmail } from '@/services/mail'
 
 const router = express.Router();
 
@@ -30,17 +30,12 @@ router.post('/signup', async (req, res) => {
     );
 
     const verificationUrl = `${config.serverUrl}/api/auth/verify-email?token=${verificationToken}`;
-
-    await mailTransport.sendMail({
-        from: {
-          name: config.smtpFromName,
-          email: config.smtpFromEmail,
-        },
-        to: email,
-        subject: 'Verify your email',
-        html: `<p>Please verify your email by clicking the link below:</p>
-             <a href="${verificationUrl}">Verify Email</a>`
-      })
+    await sendHtmlEmail(
+      email,
+      'Verify your email',
+      `<p>Please verify your email by clicking the link below:</p>
+       <a href="${verificationUrl}">Verify Email</a>`
+    )
 
     // Generate JWT token
     const token = jwt.sign(

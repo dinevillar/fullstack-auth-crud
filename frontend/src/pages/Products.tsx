@@ -24,7 +24,7 @@ export default function Products() {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [dispatch]);
 
   const fetchProducts = async () => {
     try {
@@ -40,7 +40,7 @@ export default function Products() {
     e.preventDefault();
     try {
       if (editingProduct) {
-        const updatedProduct = await api.updateProduct(editingProduct.id, formData);
+        const updatedProduct = await api.updateProduct(editingProduct._id, formData);
         dispatch(updateProduct(updatedProduct));
       } else {
         const newProduct = await api.createProduct(formData);
@@ -123,7 +123,7 @@ export default function Products() {
             <div className="bg-white shadow overflow-hidden sm:rounded-md">
               <ul className="divide-y divide-gray-200">
                 {products.map((product) => (
-                  <li key={product.id} className="px-6 py-4">
+                  <li key={product._id} className="px-6 py-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
@@ -138,7 +138,7 @@ export default function Products() {
                           <Edit className="h-5 w-5" />
                         </button>
                         <button
-                          onClick={() => handleDelete(product.id)}
+                          onClick={() => handleDelete(product._id)}
                           className="text-red-600 hover:text-red-800"
                         >
                           <Trash2 className="h-5 w-5" />
