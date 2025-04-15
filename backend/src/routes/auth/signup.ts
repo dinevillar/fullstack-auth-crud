@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { User } from '@/models/User'
+import { User, zSignupSchema } from '@/models/User'
 import jwt from 'jsonwebtoken'
 import { config } from '@/config'
 import express from 'express'
@@ -7,15 +7,10 @@ import { mailTransport } from '@/services/mail'
 
 const router = express.Router();
 
-const signupSchema = z.object({
-  email: z.string().email('Invalid email format'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-});
-
 router.post('/signup', async (req, res) => {
   try {
     // Validate request body
-    const { email, password } = signupSchema.parse(req.body);
+    const { email, password } = zSignupSchema.parse(req.body);
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import { z } from 'zod'
 
 export interface IUser extends Document {
   email: string;
@@ -9,6 +10,11 @@ export interface IUser extends Document {
   verifiedAt: Date;
   createdAt: Date;
 }
+
+export const zSignupSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+});
 
 const userSchema = new mongoose.Schema<IUser>({
   email: {

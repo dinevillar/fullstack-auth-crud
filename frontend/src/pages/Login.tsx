@@ -2,11 +2,10 @@ import React from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { LogIn } from 'lucide-react';
-import { loginUser } from '../api/auth.ts'
 import { setAuth } from '../store/slices/authSlice.ts'
 import { Button, CircularProgress} from '@mui/material';
-import { apiUrl } from '../api/client.ts'
 import { jwtDecode } from 'jwt-decode'
+import { login, apiUrl } from '../services/api.ts'
 
 
 export default function Login() {
@@ -23,7 +22,7 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const { user, token } = await loginUser({ email, password })
+      const { user, token } = await login( email, password )
       localStorage.setItem('authToken', token);
       dispatch(setAuth({ user }));
       navigate('/');

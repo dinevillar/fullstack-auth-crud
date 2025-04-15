@@ -9,6 +9,7 @@ import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
 import Products from './pages/Products';
 import PrivateRoute from './components/PrivateRoute';
+import Dashboard from './pages/Dashboard.tsx'
 
 const theme = createTheme({
   palette: {
@@ -33,14 +34,13 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
-              path="/products"
+              path="/"
               element={
                 <PrivateRoute>
-                  <Products />
+                  <Dashboard />
                 </PrivateRoute>
               }
             />
-            <Route path="/" element={<Navigate to="/products" replace />} />
           </Routes>
         </Router>
       </ThemeProvider>

@@ -115,6 +115,10 @@ export default function Products() {
 
           {loading ? (
             <div className="text-center py-4">Loading...</div>
+          ) : products.length === 0 ? (
+            <div className="text-center py-4">
+              <p className="text-gray-500">No products available.</p>
+            </div>
           ) : (
             <div className="bg-white shadow overflow-hidden sm:rounded-md">
               <ul className="divide-y divide-gray-200">
